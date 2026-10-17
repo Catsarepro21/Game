@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c8smlvlvgu2i2"]
+
+[ext_resource type="FontFile" uid="uid://dm058mhtjj7lw" path="res://Assets/Excalifont-Regular.woff2" id="1_x2hje"]
+
+[node name="Settings" type="Node2D" unique_id=1452189756]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=543968573]
+offset_right = 1916.0
+offset_bottom = 1074.0
+color = Color(0.16241848, 0.17538086, 0.31650168, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1551607246]
+offset_left = 726.0
+offset_top = -4.0
+offset_right = 1171.0
+offset_bottom = 140.0
+theme_override_fonts/normal_font = ExtResource("1_x2hje")
+theme_override_font_sizes/normal_font_size = 100
+text = "Settings"

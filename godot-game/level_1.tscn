@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://c6neae1wfjv88"]
+
+[ext_resource type="PackedScene" uid="uid://f71buoaf1q71" path="res://player.tscn" id="1_3hls8"]
+
+[node name="Level 1" type="Node2D" unique_id=1152026379]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1370176155]
+offset_right = 1920.0
+offset_bottom = 1076.0
+color = Color(0.1148968, 0.11489681, 0.1148968, 1)
+
+[node name="PlayerBody" parent="." unique_id=639702676 instance=ExtResource("1_3hls8")]
