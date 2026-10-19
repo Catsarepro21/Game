@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://d28i7a5t5qwuf"]
+
+[ext_resource type="Texture2D" uid="uid://0cwyfwrnxv6o" path="res://Assets/image-removebg-preview (4).png" id="1_d24ss"]
+[ext_resource type="FontFile" uid="uid://dm058mhtjj7lw" path="res://Assets/Excalifont-Regular.woff2" id="2_d24ss"]
+
+[node name="HUD" type="CanvasLayer" unique_id=1216347090]
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1170264978]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 176.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2100683862]
+layout_mode = 2
+alignment = 2
+
+[node name="AmmoDisplay" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1069001412]
+layout_mode = 2
+
+[node name="AmmoIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/AmmoDisplay" unique_id=582069963]
+custom_minimum_size = Vector2(12, 5)
+custom_maximum_size = Vector2(-1, 120)
+layout_mode = 2
+texture = ExtResource("1_d24ss")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="AmmoCount" type="Label" parent="MarginContainer/HBoxContainer/AmmoDisplay" unique_id=151401779]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_d24ss")
+theme_override_font_sizes/font_size = 29
+text = "3"

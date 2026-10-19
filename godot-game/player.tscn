@@ -17,7 +17,7 @@ light_mode = 1
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3hls8"]
 light_mode = 1
 
-[node name="PlayerBody" type="CharacterBody2D" unique_id=639702676]
+[node name="Player" type="CharacterBody2D" unique_id=639702676]
 position = Vector2(200, 200)
 script = ExtResource("1_onrkg")
 
