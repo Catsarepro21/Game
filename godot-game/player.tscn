@@ -32,9 +32,6 @@ color = Color(1, 0.9529412, 0.39215687, 0.32156864)
 antialiased = true
 polygon = PackedVector2Array(0, 0, 380, -180, 430, -100, 450, 0, 430, 100, 380, 180)
 script = ExtResource("2_hqtel")
-cone_angle_deg = null
-cone_distance = null
-arc_segments = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1282379270]
 material = SubResource("CanvasItemMaterial_435oi")

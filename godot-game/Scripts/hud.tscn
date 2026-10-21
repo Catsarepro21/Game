@@ -1,37 +1,238 @@
 [gd_scene format=3 uid="uid://d28i7a5t5qwuf"]
 
 [ext_resource type="Texture2D" uid="uid://0cwyfwrnxv6o" path="res://Assets/image-removebg-preview (4).png" id="1_d24ss"]
+[ext_resource type="Script" uid="uid://dxv1quw18dne0" path="res://Scripts/hud.gd" id="1_pct8s"]
 [ext_resource type="FontFile" uid="uid://dm058mhtjj7lw" path="res://Assets/Excalifont-Regular.woff2" id="2_d24ss"]
+[ext_resource type="Texture2D" uid="uid://do7rrhufna8lx" path="res://Assets/Heart_Spritesheet.png" id="3_yp8c5"]
+[ext_resource type="Texture2D" uid="uid://d2b3g2govnxgt" path="res://Assets/Spyglass_Thingy.png" id="4_0s7ow"]
+[ext_resource type="Texture2D" uid="uid://bqrmwnjp60a3c" path="res://Assets/arrow.png" id="6_8xgub"]
+[ext_resource type="Texture2D" uid="uid://dkyntqkbj3q0r" path="res://Assets/Gun.png" id="7_0thed"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0s7ow"]
+atlas = ExtResource("3_yp8c5")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pct8s"]
+atlas = ExtResource("3_yp8c5")
+region = Rect2(0, 32, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_42no8"]
+atlas = ExtResource("3_yp8c5")
+region = Rect2(64, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xgub"]
+atlas = ExtResource("3_yp8c5")
+region = Rect2(64, 32, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0thed"]
+atlas = ExtResource("3_yp8c5")
+region = Rect2(0, 64, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yp8c5"]
+atlas = ExtResource("3_yp8c5")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4i5w4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0s7ow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_42no8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0s7ow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_42no8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}],
+"loop": 0,
+"name": &"LoseHeart1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pct8s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}],
+"loop": 0,
+"name": &"LoseHeart2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0thed")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0thed")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0thed")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xgub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0thed")
+}],
+"loop": 0,
+"name": &"LoseHeart3",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yp8c5")
+}],
+"loop": 1,
+"name": &"NoAnimation",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hud_bullet"]
+atlas = ExtResource("1_d24ss")
+region = Rect2(48, 22, 32, 84)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hud_spyglass"]
+atlas = ExtResource("4_0s7ow")
+region = Rect2(8, 4, 112, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hud_gun"]
+atlas = ExtResource("7_0thed")
+region = Rect2(32, 24, 76, 52)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hud_arrow"]
+atlas = ExtResource("6_8xgub")
+region = Rect2(16, 0, 60, 120)
 
 [node name="HUD" type="CanvasLayer" unique_id=1216347090]
+script = ExtResource("1_pct8s")
+
+[node name="AmmoDisplay" type="HBoxContainer" parent="." unique_id=1069001412]
+offset_left = 1754.0
+offset_top = 46.0
+offset_right = 1882.0
+offset_bottom = 152.0
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1170264978]
+texture_filter = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 176.0
+offset_bottom = 116.0
 grow_horizontal = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2100683862]
 layout_mode = 2
-alignment = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
 
-[node name="AmmoDisplay" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1069001412]
+[node name="Hearts" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1650311010]
+custom_minimum_size = Vector2(204, 52)
 layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
 
-[node name="AmmoIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/AmmoDisplay" unique_id=582069963]
-custom_minimum_size = Vector2(12, 5)
-custom_maximum_size = Vector2(-1, 120)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MarginContainer/HBoxContainer/Hearts" unique_id=141502921]
+position = Vector2(-28, -40)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_4i5w4")
+animation = &"NoAnimation"
+centered = false
+
+[node name="AmmoIcon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=582069963]
+custom_minimum_size = Vector2(20, 52)
 layout_mode = 2
-texture = ExtResource("1_d24ss")
-expand_mode = 3
+mouse_filter = 2
+texture = SubResource("AtlasTexture_hud_bullet")
+expand_mode = 1
 stretch_mode = 5
 
-[node name="AmmoCount" type="Label" parent="MarginContainer/HBoxContainer/AmmoDisplay" unique_id=151401779]
+[node name="AmmoCount" type="Label" parent="MarginContainer/HBoxContainer" unique_id=151401779]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_d24ss")
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 38
+mouse_filter = 2
 text = "3"
+vertical_alignment = 1
+
+[node name="ItemSwap" type="Control" parent="." unique_id=46222107]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -168.0
+offset_right = 224.0
+offset_bottom = -32.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="SpyglassThingy_png" type="Sprite2D" parent="ItemSwap" unique_id=189326285]
+position = Vector2(148, 68)
+scale = Vector2(0.6, 0.6)
+texture = SubResource("AtlasTexture_hud_spyglass")
+
+[node name="Gun" type="Sprite2D" parent="ItemSwap" unique_id=1850803138]
+position = Vector2(48, 68)
+texture = SubResource("AtlasTexture_hud_gun")
+
+[node name="Arrow" type="Sprite2D" parent="ItemSwap" unique_id=511001394]
+position = Vector2(100, 18)
+rotation = 1.5707964
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_hud_arrow")
+
+[node name="Arrow2" type="Sprite2D" parent="ItemSwap" unique_id=1297054059]
+position = Vector2(100, 118)
+rotation = -1.5707964
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_hud_arrow")
