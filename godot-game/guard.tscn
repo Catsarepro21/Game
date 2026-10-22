@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://b1k5pqxtk6qjf"]
+
+[ext_resource type="Script" uid="uid://cco3qftxeqy7" path="res://Scripts/flashlight_2d.gd" id="1_aoykg"]
+[ext_resource type="Script" uid="uid://ivc5tsec5wi7" path="res://Scripts/guard.gd" id="1_cruxe"]
+[ext_resource type="Texture2D" uid="uid://bcxhd30ymypil" path="res://Assets/Guard.png" id="2_cruxe"]
+[ext_resource type="Texture2D" uid="uid://dk6ida1em34wo" path="res://Assets/guard_light.tres" id="3_cruxe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ay375"]
+radius = 32.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tuxdl"]
+light_mode = 1
+
+[node name="Guard" type="CharacterBody2D" unique_id=1408638020]
+script = ExtResource("1_cruxe")
+
+[node name="PlayerCollision" type="CollisionShape2D" parent="." unique_id=1455354075]
+shape = SubResource("CircleShape2D_ay375")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1369085674]
+material = SubResource("CanvasItemMaterial_tuxdl")
+position = Vector2(-6.4999943, -5.999995)
+scale = Vector2(2.4687495, 2.4999998)
+texture = ExtResource("2_cruxe")
+
+[node name="Flashlight2D" type="PointLight2D" parent="." unique_id=558054460]
+color = Color(6.269682, 2.9548223, 0, 0.41568628)
+energy = 2.3
+shadow_enabled = true
+shadow_filter = 1
+texture = ExtResource("3_cruxe")
+texture_scale = 0.78125
+script = ExtResource("1_aoykg")
+cone_angle_deg = 45.0
+cone_distance = 200.0

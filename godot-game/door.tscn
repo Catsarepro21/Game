@@ -8,6 +8,9 @@ size = Vector2(12, 80)
 [sub_resource type="CircleShape2D" id="CircleShape2D_435oi"]
 radius = 64.0
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_435oi"]
+polygon = PackedVector2Array(0, 0, 12, 0, 12, 80, 0, 80)
+
 [node name="Door" type="AnimatableBody2D" unique_id=1064558775]
 script = ExtResource("1_ba8gm")
 
@@ -27,3 +30,7 @@ color = Color(0.3529412, 0.23921569, 0.15686275, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=740277902]
 position = Vector2(6, 40)
 shape = SubResource("CircleShape2D_435oi")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=354594556]
+rotation = 0.0
+occluder = SubResource("OccluderPolygon2D_435oi")

@@ -2,8 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://xn73te0kngrq" path="res://Assets/Player.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://lsg2cctquelj" path="res://Scripts/player.gd" id="1_onrkg"]
-[ext_resource type="Script" uid="uid://cco3qftxeqy7" path="res://Scripts/flashlight_2d.gd" id="2_hqtel"]
 [ext_resource type="Texture2D" uid="uid://degf2ig5ptohj" path="res://Assets/flashlight_texture.tres" id="3_i3pqv"]
+
+[ext_resource type="Script" path="res://Scripts/flashlight_2d.gd" id="4_cone"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_435oi"]
 radius = 32.0
@@ -24,15 +25,12 @@ script = ExtResource("1_onrkg")
 [node name="PlayerCollision" type="CollisionShape2D" parent="." unique_id=1863292089]
 shape = SubResource("CircleShape2D_435oi")
 
-[node name="Flashlight2D" type="Polygon2D" parent="." unique_id=1706924422]
-material = SubResource("CanvasItemMaterial_hbghi")
-position = Vector2(-24.999998, -0.9999924)
-scale = Vector2(0.6844444, 0.60555553)
-color = Color(1, 0.9529412, 0.39215687, 0.32156864)
-antialiased = true
-polygon = PackedVector2Array(0, 0, 380, -180, 430, -100, 450, 0, 430, 100, 380, 180)
-script = ExtResource("2_hqtel")
-
+[node name="Flashlight2D" type="PointLight2D" parent="."]
+color = Color(1, 0.95, 0.63, 1)
+energy = 2.3
+shadow_enabled = true
+shadow_filter = 1
+script = ExtResource("4_cone")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1282379270]
 material = SubResource("CanvasItemMaterial_435oi")
 position = Vector2(-6.4999943, -5.999995)
@@ -45,3 +43,5 @@ color = Color(0.7950739, 0.7968274, 6.27625e-05, 0.44313726)
 energy = 4.59
 texture = ExtResource("3_i3pqv")
 texture_scale = 0.95
+shadow_enabled = true
+shadow_filter = 1
