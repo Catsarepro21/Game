@@ -29,7 +29,7 @@ func _rebuild_texture() -> void:
 	var half_angle := deg_to_rad(cone_angle_deg * 0.5)
 	var edge_width := deg_to_rad(0.7)
 	for y in range(SIZE):
-		for x in range(SIZE / 2, SIZE):
+		for x in range(SIZE >> 1, SIZE):
 			var direction := (Vector2(x, y) + Vector2(0.5, 0.5) - Vector2.ONE * SIZE * 0.5) / (SIZE * 0.5)
 			var radius := direction.length()
 			var angle := absf(direction.angle())
@@ -38,7 +38,11 @@ func _rebuild_texture() -> void:
 			var edge := 1.0 - smoothstep(maxf(0.0, half_angle - edge_width), half_angle, angle)
 			var falloff := (1.0 - 0.35 * radius) * (1.0 - smoothstep(0.8, 1.0, radius))
 			light_image.set_pixel(x, y, Color(1, 1, 1, edge * falloff))
-	texture = ImageTexture.create_from_image(light_image)
+	# Reuse the texture on Inspector updates rather than replacing its GPU resource.
+	if texture is ImageTexture:
+		(texture as ImageTexture).update(light_image)
+	else:
+		texture = ImageTexture.create_from_image(light_image)
 	texture_scale = cone_distance * 2.0 / SIZE
 	offset = Vector2.ZERO
 	shadow_enabled = true

@@ -40,7 +40,8 @@ func set_active_slot(slot: int) -> void:
 	spyglass_sprite.modulate.a = 1.0 if slot == 2 else 0.35
 
 func update_ammo(current: int, maximum: int) -> void:
-	ammo_label.text = str(clampi(current, 0, maximum))
+	ammo_label.text = "%d / %d" % [clampi(current, 0, maximum), maximum]
+	ammo_label.modulate = Color(1, 0.4, 0.35) if current == 0 else Color.WHITE
 
 func update_health(current: int, maximum: int) -> void:
 	var health := clampi(current, 0, mini(maximum, 3))

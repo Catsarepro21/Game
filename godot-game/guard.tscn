@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://b1k5pqxtk6qjf"]
 
 [ext_resource type="Script" uid="uid://cco3qftxeqy7" path="res://Scripts/flashlight_2d.gd" id="1_aoykg"]
-[ext_resource type="Script" uid="uid://ivc5tsec5wi7" path="res://Scripts/guard.gd" id="1_cruxe"]
+[ext_resource type="Script" path="res://Scripts/guard.gd" id="1_cruxe"]
 [ext_resource type="Texture2D" uid="uid://bcxhd30ymypil" path="res://Assets/Guard.png" id="2_cruxe"]
-[ext_resource type="Texture2D" uid="uid://dk6ida1em34wo" path="res://Assets/guard_light.tres" id="3_cruxe"]
+[ext_resource type="Texture2D" path="res://Assets/guard_cone.res" id="3_cruxe"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ay375"]
 radius = 32.0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tuxdl"]
-light_mode = 1
+light_mode = 0
 
 [node name="Guard" type="CharacterBody2D" unique_id=1408638020]
 script = ExtResource("1_cruxe")
@@ -33,3 +33,6 @@ texture_scale = 0.78125
 script = ExtResource("1_aoykg")
 cone_angle_deg = 45.0
 cone_distance = 200.0
+
+
+

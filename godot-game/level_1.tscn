@@ -4,6 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://d28i7a5t5qwuf" path="res://Scripts/hud.tscn" id="1_hn12h"]
 [ext_resource type="PackedScene" uid="uid://crfrqtt0fsvsw" path="res://door.tscn" id="2_hbghi"]
 [ext_resource type="PackedScene" uid="uid://b1k5pqxtk6qjf" path="res://guard.tscn" id="4_ihfcg"]
+[ext_resource type="Script" uid="uid://bckdhcckejmmp" path="res://Scripts/guard_waypoint.gd" id="5_waypoint"]
+
+[ext_resource type="Script" path="res://Scripts/player_visibility.gd" id="6_visibility"]
 
 [node name="Level 1" type="Node2D" unique_id=1152026379]
 
@@ -22,6 +25,30 @@ position = Vector2(427, 160)
 open_angle_deg = -110.0
 open_duration = 1.0
 
-[node name="Guard" parent="." unique_id=1408638020 instance=ExtResource("4_ihfcg")]
+[node name="Guard" parent="." unique_id=1408638020 node_paths=PackedStringArray("patrol_points") instance=ExtResource("4_ihfcg")]
 position = Vector2(510, 206)
 rotation = 3.1681364
+behavior = 2
+patrol_points = [NodePath("../PatrolPoints/Start"), NodePath("../PatrolPoints/TurnAndScan")]
+patrol_route = 1
+
+[node name="PatrolPoints" type="Node2D" parent="." unique_id=1960149371]
+
+[node name="Start" type="Marker2D" parent="PatrolPoints" unique_id=297809936]
+position = Vector2(510, 206)
+rotation = 3.1415927
+script = ExtResource("5_waypoint")
+face_marker_direction = true
+
+[node name="TurnAndScan" type="Marker2D" parent="PatrolPoints" unique_id=384026413]
+position = Vector2(730, 206)
+script = ExtResource("5_waypoint")
+spin_at_stop = true
+
+[node name="Darkness" type="CanvasModulate" parent="."]
+color = Color(0, 0, 0, 1)
+
+
+[node name="PlayerVisibility" type="Node" parent="."]
+script = ExtResource("6_visibility")
+

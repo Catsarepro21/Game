@@ -147,6 +147,7 @@ atlas = ExtResource("6_8xgub")
 region = Rect2(16, 0, 60, 120)
 
 [node name="HUD" type="CanvasLayer" unique_id=1216347090]
+layer = 2
 script = ExtResource("1_pct8s")
 
 [node name="AmmoDisplay" type="HBoxContainer" parent="." unique_id=1069001412]
@@ -236,3 +237,6 @@ position = Vector2(100, 118)
 rotation = -1.5707964
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_hud_arrow")
+
+
+
