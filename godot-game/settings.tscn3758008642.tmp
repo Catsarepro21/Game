@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://c8smlvlvgu2i2"]
+
+[ext_resource type="Script" uid="uid://y0yf8y5ouqmn" path="res://Scripts/settings.gd" id="1_3ykye"]
+[ext_resource type="FontFile" uid="uid://dm058mhtjj7lw" path="res://Assets/Excalifont-Regular.woff2" id="1_x2hje"]
+[ext_resource type="Texture2D" uid="uid://degf2ig5ptohj" path="res://Assets/flashlight_texture.tres" id="2_nkug2"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_435oi"]
+closed = false
+polygon = PackedVector2Array(680, 124, 1173, 124, 1173, 138, 678, 138)
+
+[node name="Settings" type="Node2D" unique_id=1452189756]
+script = ExtResource("1_3ykye")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1520321382]
+color = Color(0.04238478, 0.049472794, 0.1140896, 1)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=543968573]
+offset_right = 1916.0
+offset_bottom = 1074.0
+color = Color(0.04238478, 0.049472794, 0.1140896, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1551607246]
+offset_left = 726.0
+offset_top = -4.0
+offset_right = 1171.0
+offset_bottom = 140.0
+theme_override_fonts/normal_font = ExtResource("1_x2hje")
+theme_override_font_sizes/normal_font_size = 100
+text = "Settings"
+
+[node name="Cursor LightUp" type="PointLight2D" parent="." unique_id=2116480842]
+position = Vector2(418, 522)
+scale = Vector2(3.5546873, 3.3515623)
+energy = 10.0
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 2.0
+texture = ExtResource("2_nkug2")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=795362235]
+occluder = SubResource("OccluderPolygon2D_435oi")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1755567627]
+offset_left = 48.0
+offset_top = 281.0
+offset_right = 498.0
+offset_bottom = 564.0
+theme_override_constants/separation = 24
+
+[node name="Volume Label" type="Label" parent="VBoxContainer" unique_id=699181752]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_x2hje")
+theme_override_font_sizes/font_size = 32
+text = "Master Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="VBoxContainer" unique_id=1266008995]
+layout_mode = 2
+
+[node name="Brightness Label" type="Label" parent="VBoxContainer" unique_id=1672089465]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_x2hje")
+theme_override_font_sizes/font_size = 32
+text = "Brightness"
+
+[node name="Brightness Slider" type="HSlider" parent="VBoxContainer" unique_id=677534541]
+layout_mode = 2
+
+[node name="Fullscreen Check" type="CheckButton" parent="VBoxContainer" unique_id=1564499632]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_x2hje")
+theme_override_font_sizes/font_size = 32
+button_pressed = true
+text = "Fullscreen"
+
+[node name="Keybinder" type="VBoxContainer" parent="VBoxContainer" unique_id=247653253]
+layout_mode = 2

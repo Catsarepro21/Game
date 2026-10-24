@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bdkghamgx1ler"]
+
+[ext_resource type="Script" uid="uid://bkmd42fuo8t82" path="res://Scripts/title_screen.gd" id="1_v6p8y"]
+
+[node name="Title Screen" type="Node2D" unique_id=112052065]
+script = ExtResource("1_v6p8y")
+
+[node name="Settings" type="Button" parent="." unique_id=929921923]
+offset_left = 853.0
+offset_top = 215.0
+offset_right = 923.0
+offset_bottom = 246.0
+text = "Settings"

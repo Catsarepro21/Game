@@ -66,8 +66,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		set_active_slot(Slot.GUN)
 	elif event.is_action_pressed("equip_spyglass"):
 		set_active_slot(Slot.SPYGLASS)
-	elif event.is_action_pressed("reload"):
-		reload()
 	elif event.is_action_pressed("fire"):
 		use_active_item(get_global_mouse_position())
 	else:
@@ -139,11 +137,6 @@ func fire() -> bool:
 	shot_fired.emit(global_position, direction)
 	queue_redraw()
 	return true
-
-func reload() -> void:
-	if current_health <= 0 or active_slot != Slot.GUN or current_ammo == max_ammo or reload_remaining > 0:
-		return
-	reload_remaining = reload_duration
 
 func peek_target(target_position: Vector2) -> Vector2:
 	return global_position + (target_position - global_position).limit_length(peek_range)
