@@ -4,19 +4,23 @@
 [ext_resource type="FontFile" uid="uid://dm058mhtjj7lw" path="res://Assets/Excalifont-Regular.woff2" id="1_x2hje"]
 [ext_resource type="Texture2D" uid="uid://degf2ig5ptohj" path="res://Assets/flashlight_texture.tres" id="2_nkug2"]
 
+[ext_resource type="Script" path="res://Scripts/scene_canvas_modulate.gd" id="editor_preview"]
+
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_435oi"]
-closed = false
 polygon = PackedVector2Array(680, 124, 1173, 124, 1173, 138, 678, 138)
 
 [node name="Settings" type="Node2D" unique_id=1452189756]
 script = ExtResource("1_3ykye")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1520321382]
+script = ExtResource("editor_preview")
+preview_in_editor = true
 color = Color(0.04238478, 0.049472794, 0.1140896, 1)
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=543968573]
-offset_right = 1916.0
-offset_bottom = 1074.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
 color = Color(0.04238478, 0.049472794, 0.1140896, 1)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1551607246]
@@ -29,8 +33,8 @@ theme_override_font_sizes/normal_font_size = 100
 text = "Settings"
 
 [node name="Cursor LightUp" type="PointLight2D" parent="." unique_id=2116480842]
-position = Vector2(418, 522)
-scale = Vector2(3.5546873, 3.3515623)
+position = Vector2(688, 776.5714)
+scale = Vector2(1.4453124, 1.3627231)
 energy = 10.0
 shadow_enabled = true
 shadow_filter = 1
@@ -74,3 +78,12 @@ text = "Fullscreen"
 
 [node name="Keybinder" type="VBoxContainer" parent="VBoxContainer" unique_id=247653253]
 layout_mode = 2
+
+[node name="Back" type="Button" parent="." unique_id=941869372]
+offset_left = 48.0
+offset_top = 990.0
+offset_right = 330.0
+offset_bottom = 1046.0
+theme_override_fonts/font = ExtResource("1_x2hje")
+theme_override_font_sizes/font_size = 28
+text = "Back to title"

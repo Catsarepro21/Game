@@ -1,4 +1,5 @@
-extends CanvasLayer
+@tool
+extends "res://Scripts/scene_canvas_layer.gd"
 
 @onready var gun_sprite: Sprite2D = $ItemSwap/Gun
 @onready var spyglass_sprite: Sprite2D = $ItemSwap/SpyglassThingy_png
@@ -8,6 +9,10 @@ var _player: CharacterBody2D
 var _last_health: int = -1
 
 func _ready() -> void:
+	super._ready()
+	if Engine.is_editor_hint():
+		return
+	_ignore_mouse(self)
 	set_active_slot(1)
 	get_tree().node_added.connect(_on_node_added)
 	_bind_player.call_deferred()
@@ -49,8 +54,13 @@ func update_health(current: int, maximum: int) -> void:
 		return
 	var animations: Array[StringName] = [&"LoseHeart3", &"LoseHeart2", &"LoseHeart1", &"NoAnimation"]
 	hearts_anim.play(animations[health])
-	# Initial binding and healing show the correct state immediately.
 	if _last_health == -1 or health > _last_health:
 		hearts_anim.pause()
 		hearts_anim.frame = hearts_anim.sprite_frames.get_frame_count(animations[health]) - 1
 	_last_health = health
+
+func _ignore_mouse(node: Node) -> void:
+	if node is Control:
+		node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in node.get_children():
+		_ignore_mouse(child)

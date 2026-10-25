@@ -7,6 +7,7 @@ signal shot_fired(origin: Vector2, direction: Vector2)
 signal died
 
 enum Slot { GUN = 1, SPYGLASS = 2 }
+const SETTINGS = preload("res://Scripts/settings.gd")
 const SPEED: float = 250.0
 const PEEK_LIGHT = preload("res://Scripts/peek_light.gd")
 @export_range(1, 3) var max_health: int = 3
@@ -15,7 +16,6 @@ const PEEK_LIGHT = preload("res://Scripts/peek_light.gd")
 @export_range(50.0, 2000.0) var gun_range: float = 700.0
 @export_range(1, 10) var gun_damage: int = 1
 @export_range(0.1, 2.0) var fire_interval: float = 0.3
-@export_range(0.1, 5.0) var reload_duration: float = 1.2
 @export_flags_2d_physics var gun_collision_mask: int = 1
 @export_group("Peek Light")
 @export_range(40.0, 600.0) var peek_range: float = 240.0
@@ -27,7 +27,6 @@ const PEEK_LIGHT = preload("res://Scripts/peek_light.gd")
 var current_health: int = 3
 var current_ammo: int = 3
 var active_slot: int = Slot.GUN
-var reload_remaining: float = 0.0
 var peek_cooldown_remaining: float = 0.0
 var _fire_remaining: float = 0.0
 var _hurt_remaining: float = 0.0
@@ -35,16 +34,19 @@ var _tracer_remaining: float = 0.0
 var _shot_end: Vector2
 var _peek_light: PointLight2D
 var _held_item: Sprite2D
+var _peek_preview: Node2D
 
 func _enter_tree() -> void:
 	add_to_group("player")
 
 func _ready() -> void:
+	SETTINGS.load_preferences()
 	current_health = max_health
 	current_ammo = max_ammo
 	for child in get_children():
 		if child is PointLight2D:
 			child.add_to_group("player_visibility_lights")
+			child.energy *= SETTINGS.brightness_scale()
 	_held_item = Sprite2D.new()
 	_held_item.position = Vector2(34, 4)
 	_held_item.scale = Vector2(0.45, 0.45)
@@ -52,12 +54,24 @@ func _ready() -> void:
 	_held_item.material.light_mode = CanvasItemMaterial.LIGHT_MODE_NORMAL
 	add_child(_held_item)
 	_update_held_item()
+	var preview_layer := CanvasLayer.new()
+	preview_layer.name = "SpyglassPreviewLayer"
+	preview_layer.layer = 2
+	add_child(preview_layer)
+	_peek_preview = Node2D.new()
+	_peek_preview.name = "TargetCircle"
+	var preview_material := CanvasItemMaterial.new()
+	preview_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	_peek_preview.material = preview_material
+	preview_layer.add_child(_peek_preview)
+	_peek_preview.draw.connect(_draw_peek_preview)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_echo():
 		return
 	if current_health <= 0:
-		if event.is_action_pressed("reload"):
+		if event.is_action_pressed("restart"):
+			get_viewport().set_input_as_handled()
 			get_tree().reload_current_scene()
 		return
 	if event.is_action_pressed("swap_item"):
@@ -73,15 +87,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 func _physics_process(delta: float) -> void:
+	_peek_preview.queue_redraw()
 	_fire_remaining = maxf(0.0, _fire_remaining - delta)
 	peek_cooldown_remaining = maxf(0.0, peek_cooldown_remaining - delta)
 	_hurt_remaining = maxf(0.0, _hurt_remaining - delta)
 	_tracer_remaining = maxf(0.0, _tracer_remaining - delta)
-	if reload_remaining > 0:
-		reload_remaining = maxf(0.0, reload_remaining - delta)
-		if reload_remaining <= 0:
-			current_ammo = max_ammo
-			ammo_updated.emit(current_ammo, max_ammo)
 	$Sprite2D.modulate = Color(1, 0.35, 0.35) if _hurt_remaining > 0 else Color.WHITE
 	if current_health <= 0:
 		velocity = Vector2.ZERO
@@ -110,17 +120,19 @@ func set_active_slot(slot: int) -> void:
 	if current_health <= 0 or slot not in [Slot.GUN, Slot.SPYGLASS] or slot == active_slot:
 		return
 	active_slot = slot
-	reload_remaining = 0.0
 	_update_held_item()
+	_peek_preview.queue_redraw()
 	slot_changed.emit(active_slot)
 
 func use_active_item(target_position: Vector2) -> bool:
 	if active_slot == Slot.SPYGLASS:
 		return place_peek_light(target_position)
+	if not target_position.is_equal_approx(global_position):
+		look_at(target_position)
 	return fire()
 
 func fire() -> bool:
-	if current_health <= 0 or active_slot != Slot.GUN or current_ammo <= 0 or reload_remaining > 0 or _fire_remaining > 0:
+	if current_health <= 0 or active_slot != Slot.GUN or current_ammo <= 0 or _fire_remaining > 0:
 		return false
 	current_ammo -= 1
 	_fire_remaining = fire_interval
@@ -174,7 +186,6 @@ func take_damage(amount: int = 1) -> void:
 	_hurt_remaining = 0.5
 	health_updated.emit(current_health, max_health)
 	if current_health == 0:
-		reload_remaining = 0.0
 		if is_instance_valid(_peek_light):
 			_peek_light.queue_free()
 		died.emit()
@@ -194,11 +205,15 @@ func _draw() -> void:
 		return
 	if _tracer_remaining > 0:
 		draw_line(Vector2(34, 0), to_local(_shot_end), Color(1, 0.85, 0.4), 3.0)
-	if active_slot == Slot.SPYGLASS:
-		var destination := peek_target(get_global_mouse_position())
-		var valid := can_place_peek(destination) and peek_cooldown_remaining <= 0
-		var tint := Color(0.4, 0.9, 1.0, 0.65) if valid else Color(1, 0.35, 0.3, 0.5)
-		draw_arc(Vector2.ZERO, peek_range, 0, TAU, 96, Color(0.4,0.9,1,0.15), 1.0)
-		draw_line(Vector2.ZERO, to_local(destination), tint * Color(1,1,1,0.4), 1.0)
-		draw_arc(to_local(destination), peek_radius, 0, TAU, 64, tint, 2.0)
-		draw_circle(to_local(destination), 4.0, tint)
+
+func _draw_peek_preview() -> void:
+	if current_health <= 0 or active_slot != Slot.SPYGLASS:
+		return
+	_peek_preview.draw_set_transform_matrix(get_global_transform_with_canvas())
+	var destination := peek_target(get_global_mouse_position())
+	var valid := can_place_peek(destination) and peek_cooldown_remaining <= 0
+	var tint := Color(0.4, 0.9, 1.0, 0.9) if valid else Color(1, 0.35, 0.3, 0.85)
+	_peek_preview.draw_arc(Vector2.ZERO, peek_range, 0, TAU, 96, Color(0.4,0.9,1,0.15), 1.0)
+	_peek_preview.draw_line(Vector2.ZERO, to_local(destination), tint * Color(1,1,1,0.4), 1.0)
+	_peek_preview.draw_arc(to_local(destination), peek_radius, 0, TAU, 64, tint, 2.0)
+	_peek_preview.draw_circle(to_local(destination), 4.0, tint)

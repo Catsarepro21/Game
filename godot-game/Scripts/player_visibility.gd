@@ -1,6 +1,4 @@
 extends Node
-## Only player-owned light can reveal the world. Enemy lighting remains real,
-## but the final world image is masked by a second, player-only light pass.
 const SOURCE_GROUP: StringName = &"player_visibility_lights"
 var _mask: SubViewport
 var _surface: Polygon2D

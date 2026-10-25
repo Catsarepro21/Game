@@ -1,13 +1,128 @@
 [gd_scene format=3 uid="uid://bdkghamgx1ler"]
 
-[ext_resource type="Script" uid="uid://bkmd42fuo8t82" path="res://Scripts/title_screen.gd" id="1_v6p8y"]
+[ext_resource type="Script" uid="uid://bkmd42fuo8t82" path="res://Scripts/title_screen.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://dm058mhtjj7lw" path="res://Assets/Excalifont-Regular.woff2" id="2_font"]
+[ext_resource type="Texture2D" uid="uid://xn73te0kngrq" path="res://Assets/Player.png" id="3_player"]
+[ext_resource type="Texture2D" path="res://Assets/player_cone.res" id="4_cone"]
 
-[node name="Title Screen" type="Node2D" unique_id=112052065]
-script = ExtResource("1_v6p8y")
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 28.0
+content_margin_right = 28.0
+bg_color = Color(0.15, 0.17, 0.16, 1)
+border_width_left = 3
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84, 0.73, 0.42, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
-[node name="Settings" type="Button" parent="." unique_id=929921923]
-offset_left = 853.0
-offset_top = 215.0
-offset_right = 923.0
-offset_bottom = 246.0
+[sub_resource type="StyleBoxFlat" id="Normal"]
+content_margin_left = 28.0
+content_margin_right = 28.0
+bg_color = Color(0.06, 0.09, 0.12, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.26, 0.32, 0.35, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Theme" id="MenuTheme"]
+default_font = ExtResource("2_font")
+default_font_size = 28
+Button/colors/font_color = Color(0.9, 0.91, 0.86, 1)
+Button/colors/font_focus_color = Color(1, 0.88, 0.57, 1)
+Button/colors/font_hover_color = Color(1, 0.88, 0.57, 1)
+Button/styles/focus = SubResource("Hover")
+Button/styles/hover = SubResource("Hover")
+Button/styles/normal = SubResource("Normal")
+Button/styles/pressed = SubResource("Hover")
+Label/colors/font_color = Color(0.85, 0.88, 0.86, 1)
+
+[node name="Title Screen" type="Control" unique_id=2017050108]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("MenuTheme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=866205510]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.025, 0.043, 0.06, 1)
+
+[node name="Cone" type="TextureRect" parent="." unique_id=1833348193]
+modulate = Color(0.68, 0.61, 0.36, 0.21)
+layout_mode = 0
+offset_left = 790.0
+offset_top = 80.0
+offset_right = 1870.0
+offset_bottom = 1000.0
+mouse_filter = 2
+texture = ExtResource("4_cone")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Player" type="Sprite2D" parent="." unique_id=381581887]
+modulate = Color(0.8, 0.84, 0.78, 1)
+texture_filter = 1
+position = Vector2(1340, 540)
+scale = Vector2(7, 7)
+texture = ExtResource("3_player")
+
+[node name="Title" type="Label" parent="." unique_id=289339569]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 300.0
+offset_right = 1550.0
+offset_bottom = 468.0
+theme_override_font_sizes/font_size = 100
+text = "Yo idk the name choose smth"
+
+[node name="Menu" type="VBoxContainer" parent="." unique_id=875743744]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 555.0
+offset_right = 604.0
+offset_bottom = 907.0
+theme_override_constants/separation = 18
+
+[node name="Start" type="Button" parent="Menu" unique_id=775624838]
+custom_minimum_size = Vector2(460, 74)
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.9, 0.91, 0.86, 1)
+theme_override_colors/font_hover_color = Color(0.9, 0.91, 0.86, 1)
+theme_override_styles/focus = SubResource("Normal")
+theme_override_styles/hover = SubResource("Normal")
+theme_override_styles/pressed = SubResource("Normal")
+text = "Start game"
+alignment = 0
+
+[node name="Tutorial" type="Button" parent="Menu" unique_id=415240733]
+custom_minimum_size = Vector2(460, 74)
+layout_mode = 2
+text = "Tutorial"
+alignment = 0
+
+[node name="Settings" type="Button" parent="Menu" unique_id=1216809476]
+custom_minimum_size = Vector2(460, 74)
+layout_mode = 2
 text = "Settings"
+alignment = 0
+
+[node name="Quit" type="Button" parent="Menu" unique_id=1603372549]
+custom_minimum_size = Vector2(460, 74)
+layout_mode = 2
+text = "Quit"
+alignment = 0

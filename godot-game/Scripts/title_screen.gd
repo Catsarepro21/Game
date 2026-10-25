@@ -1,9 +1,19 @@
-extends Node2D
+extends Control
 
-@onready var Settings_Button: Button = $Settings
+const SETTINGS = preload("res://Scripts/settings.gd")
+var _opening: bool = false
 
 func _ready() -> void:
-	Settings_Button.pressed.connect(_on_settings_button_pressed)
-	
-func _on_settings_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://settings.tscn")
+	SETTINGS.load_preferences()
+	$Menu/Start.pressed.connect(_start)
+	$Menu/Tutorial.pressed.connect(func(): get_tree().change_scene_to_file("res://tutorial.tscn"))
+	$Menu/Settings.pressed.connect(func(): get_tree().change_scene_to_file("res://settings.tscn"))
+	$Menu/Quit.pressed.connect(func(): get_tree().quit())
+	$Menu/Start.grab_focus()
+
+func _start() -> void:
+	if _opening:
+		return
+	_opening = true
+	if get_tree().change_scene_to_file("res://level_1.tscn") != OK:
+		_opening = false

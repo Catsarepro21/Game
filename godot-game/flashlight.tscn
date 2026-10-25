@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/flashlight_2d.gd" id="1_flashlight"]
+
+[node name="Flashlight2D" type="PointLight2D"]
+color = Color(1, 0.95, 0.63, 1)
+energy = 2.3
+shadow_enabled = true
+shadow_filter = 1
+script = ExtResource("1_flashlight")

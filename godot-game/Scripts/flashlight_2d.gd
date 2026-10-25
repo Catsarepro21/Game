@@ -10,6 +10,7 @@ extends PointLight2D
 		cone_distance = value
 		_queue_texture_update()
 
+var _owned_texture: ImageTexture
 var _update_pending: bool = false
 
 func _ready() -> void:
@@ -38,11 +39,11 @@ func _rebuild_texture() -> void:
 			var edge := 1.0 - smoothstep(maxf(0.0, half_angle - edge_width), half_angle, angle)
 			var falloff := (1.0 - 0.35 * radius) * (1.0 - smoothstep(0.8, 1.0, radius))
 			light_image.set_pixel(x, y, Color(1, 1, 1, edge * falloff))
-	# Reuse the texture on Inspector updates rather than replacing its GPU resource.
-	if texture is ImageTexture:
-		(texture as ImageTexture).update(light_image)
+	if _owned_texture == null:
+		_owned_texture = ImageTexture.create_from_image(light_image)
+		texture = _owned_texture
 	else:
-		texture = ImageTexture.create_from_image(light_image)
+		_owned_texture.update(light_image)
 	texture_scale = cone_distance * 2.0 / SIZE
 	offset = Vector2.ZERO
 	shadow_enabled = true

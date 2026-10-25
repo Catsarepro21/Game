@@ -3,8 +3,8 @@ extends CharacterBody2D
 signal health_updated(current: int, maximum: int)
 signal died
 
-@export_range(1, 10) var max_health: int = 2
-var current_health: int = 2
+@export_range(1, 10) var max_health: int = 1
+var current_health: int = 1
 
 signal attack_started(target: Node2D)
 signal attack_fired(target: Node2D)
@@ -15,12 +15,10 @@ enum PatrolRoute { Loop, Ping_Pong }
 @export_category("Behavior")
 @export var behavior: GuardType = GuardType.Stationary
 @export_range(0.0, 500.0) var move_speed: float = 90.0
-## Radians per second.
 @export_range(0.1, 20.0) var turn_speed: float = 4.0
 
 @export_group("Sweep Settings")
 @export_range(0.0, 10.0) var sweep_speed: float = 1.5
-## Degrees to either side of the starting direction.
 @export_range(0.0, 180.0) var sweep_angle_deg: float = 45.0
 
 @export_group("Spin Settings")
@@ -28,7 +26,6 @@ enum PatrolRoute { Loop, Ping_Pong }
 @export var spin_clockwise: bool = true
 
 @export_group("Patrol Settings")
-## Drag markers here in order. Positions are captured at startup so child markers work too.
 @export var patrol_points: Array[Marker2D] = []
 @export var patrol_route: PatrolRoute = PatrolRoute.Loop
 @export_range(0.0, 30.0) var wait_time: float = 1.5
@@ -41,8 +38,11 @@ enum PatrolRoute { Loop, Ping_Pong }
 @export_range(1, 10) var attack_damage: int = 1
 @export_range(0.1, 10.0) var attack_cooldown: float = 1.5
 @export_range(0.1, 5.0) var attack_windup: float = 0.5
-## Include the player and walls/doors in this mask.
 @export_flags_2d_physics var sight_collision_mask: int = 1
+
+const DEATH_DURATION: float = 0.4
+var _death_remaining: float = 0.0
+var _death_angle: float = 0.0
 
 var _home_angle: float
 var _sweep_time: float = 0.0
@@ -58,6 +58,9 @@ var _windup_remaining: float = 0.0
 var _target: Node2D
 var _tracer_remaining: float = 0.0
 var _shot_end: Vector2
+
+func _enter_tree() -> void:
+	add_to_group("guards")
 
 func _ready() -> void:
 	current_health = max_health
@@ -75,6 +78,10 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if current_health <= 0:
+		_death_remaining = maxf(0.0, _death_remaining - delta)
+		queue_redraw()
+		if _death_remaining <= 0:
+			queue_free()
 		return
 	_cooldown = maxf(0.0, _cooldown - delta)
 	_tracer_remaining = maxf(0.0, _tracer_remaining - delta)
@@ -179,6 +186,17 @@ func _update_attack(delta: float) -> void:
 		_target = null
 
 func _draw() -> void:
+	if current_health <= 0 and _death_remaining > 0:
+		var progress := 1.0 - _death_remaining / DEATH_DURATION
+		var fade := 1.0 - progress
+		for index in range(12):
+			var direction := Vector2.RIGHT.rotated(_death_angle + index * TAU / 12.0)
+			var distance := (16.0 + progress * (55.0 + (index % 3) * 12.0))
+			var tip := direction * distance
+			var tail := direction * maxf(0.0, distance - 10.0 - fade * 12.0)
+			draw_line(tail, tip, Color(1.0, 0.72 + (index % 2) * 0.18, 0.3, fade), 2.0 + fade * 2.0, true)
+		draw_arc(Vector2.ZERO, 12.0 + progress * 45.0, 0, TAU, 40, Color(1, 0.8, 0.4, fade * 0.5), 2.0, true)
+		return
 	if _windup_remaining > 0.0 and is_instance_valid(_target):
 		draw_line(Vector2(30, 0), to_local(_target.global_position), Color(1, 0.15, 0.1, 0.7), 2.0)
 	elif _tracer_remaining > 0.0:
@@ -192,8 +210,18 @@ func take_damage(amount: int = 1) -> void:
 	if current_health == 0:
 		_windup_remaining = 0.0
 		velocity = Vector2.ZERO
+		_tracer_remaining = 0.0
+		_death_remaining = DEATH_DURATION
+		_death_angle = randf_range(0, TAU)
+		set_deferred("collision_layer", 0)
+		set_deferred("collision_mask", 0)
+		$Sprite2D.hide()
+		$Flashlight2D.enabled = false
+		var effect_material := CanvasItemMaterial.new()
+		effect_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+		material = effect_material
+		queue_redraw()
 		died.emit()
-		queue_free()
 	else:
 		$Sprite2D.modulate = Color(1.0, 0.35, 0.35)
 		create_tween().tween_property($Sprite2D, "modulate", Color.WHITE, 0.2)

@@ -1,5 +1,5 @@
 extends PointLight2D
-## A real radial light placed in world space, including across doors/walls.
+const SETTINGS = preload("res://Scripts/settings.gd")
 var lifetime: float = 6.0
 var remaining: float = 6.0
 var radius: float = 125.0
@@ -19,13 +19,13 @@ func _ready() -> void:
 	texture = radial
 	texture_scale = radius * 2.0 / 256.0
 	color = Color(0.55, 0.9, 1.0)
-	energy = 2.0
+	energy = 2.0 * SETTINGS.brightness_scale()
 	shadow_enabled = true
 	shadow_filter = Light2D.SHADOW_FILTER_PCF5
 	remaining = lifetime
 
 func _process(delta: float) -> void:
 	remaining = maxf(0.0, remaining - delta)
-	energy = 2.0 * minf(1.0, remaining / 0.6)
+	energy = 2.0 * SETTINGS.brightness_scale() * minf(1.0, remaining / 0.6)
 	if remaining <= 0.0:
 		queue_free()
